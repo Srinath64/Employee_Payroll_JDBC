@@ -32,13 +32,23 @@ public class EmployeePayrollDBService {
 
     public List<EmployeePayrollData> readData() {
         String sql = "SELECT * FROM employee_payroll; ";
+        return this.getEmployeePayrollDataUsingDB(sql);
+    }
+
+    public List<EmployeePayrollData> getEmployeeForDateRange(LocalDate startDate, LocalDate endDate) {
+        String sql = String.format("SELECT *FROM employee_payroll WHERE START BETWEEN '%s' AND '%s';" ,
+                Date.valueOf(startDate), Date.valueOf(endDate));
+        return this.getEmployeePayrollDataUsingDB(sql);
+    }
+
+    private List<EmployeePayrollData> getEmployeePayrollDataUsingDB(String sql) {
         List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         try (Connection connection = this.getConnection()){
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             employeePayrollList = this.getEmployeePayrollData(resultSet);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return employeePayrollList;
     }
