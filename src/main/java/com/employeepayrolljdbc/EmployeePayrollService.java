@@ -47,7 +47,6 @@ public class EmployeePayrollService {
         return null;
     }
 
-
     public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
         if(ioService.equals(IOService.DB_IO))
             this.employeePayrollList = employeePayrollDBService.readData();
@@ -79,6 +78,10 @@ public class EmployeePayrollService {
                 .filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void addEmployeeToPayroll(String name, double salary, LocalDate startDate, String gender) {
+        employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name, salary, startDate, gender));
     }
 
     public void writeEmployeePayrollData(IOService ioService) {

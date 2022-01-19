@@ -54,6 +54,7 @@ public class EmployeePayrollServiceTest {
         Assertions.assertEquals(3, employeePayrollData.size());
 
     }
+
     @Test
     public void givenPayrollData_WhenAverageSalaryRetrievedByGender_ShouldReturnProperValue(){
         EmployeePayrollService employeePayrollService = new EmployeePayrollService();
@@ -61,5 +62,14 @@ public class EmployeePayrollServiceTest {
         Map<String, Double> averageSalaryByGender = employeePayrollService.readAverageSalaryByGender(DB_IO);
         Assertions.assertTrue(averageSalaryByGender.get("M").equals(2000000.00) && averageSalaryByGender.get("F").equals(2000000.00));
 
+    }
+
+    @Test
+    public void givenNewEmployee_WhenAdded_ShouldSyncWithDB(){
+        EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+        employeePayrollService.readEmployeePayrollData(DB_IO);
+        employeePayrollService.addEmployeeToPayroll("Terisa", 5000000.00, LocalDate.now(), "F");
+        boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("Terisa");
+        Assertions.assertTrue(result);
     }
 }
